@@ -1,0 +1,12 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block menu %}
+    <div class="nav-scroller bg-body shadow-sm">
+            <link rel="stylesheet" href="{% static 'app/css/offcanvas.css' %}">
+            <nav class="nav" aria-label="Secondary navigation">
+                <a class="nav-link active" aria-current="page" href="#">Приложения</a>
+                <a class="nav-link" href="#">Статистика</a>
+            </nav>
+        </div>
+{% endblock %}

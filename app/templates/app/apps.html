@@ -1,0 +1,157 @@
+{% extends 'app/dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container">
+  <div class="d-flex align-items-center p-3 my-3 text-white bg-dark rounded shadow-sm">
+    <img class="me-3" src="{% static 'app/icons/upload.svg' %}" alt="" width="20" >
+
+      <div class="lh-1">
+      <h1 class="h6 mb-0 text-white lh-1">Добавить приложение</h1>
+      <small>Перетащите архив на эту область для загрузки приложения</small>
+    </div>
+  </div>
+
+  <div class="my-3 p-3 bg-body rounded shadow-sm">
+    <h6 class="border-bottom pb-2 mb-0">Приложения</h6>
+  {% for app in apps %}
+    <div class="d-flex text-muted pt-3">
+      <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32">
+          <rect width="100%" height="100%"
+                fill="
+                {% if app.is_run %}
+                    #3dd474
+                {% else %}
+                    #eb4034
+                {% endif %}"></rect>
+      </svg>
+
+      <div class="container">
+        <p class="pb-3 mb-5 small lh-sm border-bottom">
+          <strong class="d-block text-gray-dark"><a href="#mod" data-bs-toggle="modal" onclick="getData({{ app.pk }})">{{ app.title }}</a></strong>
+          {{ app.description }}
+        </p>
+      </div>
+
+      <div class="container">
+        <button type="button" onclick="getData({{ app.pk }})" class="btn btn-{% if app.is_run %}secondary{% else %}success{% endif %}" {% if app.is_run %}disabled="disabled"{% endif %}>
+          <i class="bi bi-caret-right-fill"></i>
+        </button>
+        <button type="button" class="btn btn-{% if app.is_run %}primary{% else %}secondary{% endif %}" {% if not app.is_run %}disabled="disabled"{% endif %}>
+          <i class="bi bi-pause-fill"></i>
+        </button>
+        <button type="button" class="btn btn-{% if app.is_run %}primary{% else %}secondary{% endif %}" {% if not app.is_run %}disabled="disabled"{% endif %}>
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+        <button type="button" class="btn btn-{% if app.is_run %}secondary{% else %}danger{% endif %}" {% if app.is_run %}disabled="disabled"{% endif %}>
+          <i class="bi bi-trash-fill"></i>
+        </button>
+      </div>
+    </div>
+  {% endfor %}
+
+
+<div class="modal fade" id="mod" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="titleApp">Изменение</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="AppEditForm" method="post">
+            {% csrf_token %}
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <button form="AppEditForm" type="submit" class="btn btn-primary">Изменить</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    function f(name) {
+        alert(`Нажата ${name}`)
+    }
+
+    function f1(pk) {
+        let form = fetch('http://127.0.0.1:8000/app/1')
+
+    }
+
+    function getData(pk) {
+    // URL на который будем отправлять GET запрос
+    const requestURL = `/app/${pk}`;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', requestURL);
+    xhr.onload = () => {
+      if (xhr.status !== 200) {
+        return;
+      }
+      document.querySelector('#AppEditForm').innerHTML = xhr.response;
+      {#document.querySelector('#titleApp').innerHTML = xhr.response.;#}
+    }
+    xhr.send();
+  }
+
+  </script>
+{#    <div class="d-flex text-muted pt-3">#}
+{#      <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#3dd474"/><text x="50%" y="50%" fill="#3dd474" dy=".3em">32x32</text></svg>#}
+{##}
+{#      <div class="container">#}
+{#        <p class="pb-3 mb-5 small lh-sm border-bottom">#}
+{#          <strong class="d-block text-gray-dark">MyBot</strong>#}
+{#          Поле для описания приложения пользователя. Поле для описания приложения пользователя. Поле для описания приложения пользователя. Поле для описания приложения пользователя.#}
+{#        </p>#}
+{#      </div>#}
+{##}
+{#      <div class="container">#}
+{#        <button type="button" class="btn btn-secondary">#}
+{#          <i class="bi bi-caret-right-fill"></i>#}
+{#        </button>#}
+{#        <button type="button" class="btn btn-primary">#}
+{#          <i class="bi bi-pause-fill"></i>#}
+{#        </button>#}
+{#        <button type="button" class="btn btn-primary">#}
+{#          <i class="bi bi-arrow-clockwise"></i>#}
+{#        </button>#}
+{#        <button type="button" class="btn btn-secondary">#}
+{#          <i class="bi bi-trash-fill"></i>#}
+{#        </button>#}
+{#      </div>#}
+{##}
+{#    </div>#}
+{##}
+{#    <div class="d-flex text-muted pt-3">#}
+{#      <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#3dd474"/><text x="50%" y="50%" fill="#3dd474" dy=".3em">32x32</text></svg>#}
+{##}
+{#      <div class="container">#}
+{#        <p class="pb-3 mb-5 small lh-sm border-bottom">#}
+{#          <strong class="d-block text-gray-dark">TestName</strong>#}
+{#          Поле для описания приложения пользователя. Поле для описания приложения пользователя. Поле для описания приложения польхователя. Поле для описания приложения пользователя.#}
+{#        </p>#}
+{#      </div>#}
+{##}
+{#      <div class="container">#}
+{#        <button type="button" class="btn btn-secondary">#}
+{#          <i class="bi bi-caret-right-fill"></i>#}
+{#        </button>#}
+{#        <button type="button" class="btn btn-primary">#}
+{#          <i class="bi bi-pause-fill"></i>#}
+{#        </button>#}
+{#        <button type="button" class="btn btn-primary">#}
+{#          <i class="bi bi-arrow-clockwise"></i>#}
+{#        </button>#}
+{#        <button type="button" class="btn btn-secondary">#}
+{#          <i class="bi bi-trash-fill"></i>#}
+{#        </button>#}
+{#      </div>#}
+{##}
+{#  </div>#}
+
+  </div>
+</main>
+
+{% endblock %}
