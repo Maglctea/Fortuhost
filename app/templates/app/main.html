@@ -19,9 +19,9 @@
 
         <div class="container">
           <div class="carousel-caption text-start">
-            <h1>Example headline.</h1>
-            <p>Some representative placeholder content for the first slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+            <h1>Старт в пару кликов</h1>
+            <p>Автоматическая интеграция проекта на сервер</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Подробнее</a></p>
           </div>
         </div>
       </div>
@@ -30,9 +30,9 @@
 
         <div class="container">
           <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Some representative placeholder content for the second slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+            <h1>Плата по счетчику</h1>
+            <p>Платите лишь за те ресурсы, которые вы использовали</p>
+            <p><a class="btn btn-lg btn-primary" href="#">Тарифы</a></p>
           </div>
         </div>
       </div>
@@ -40,10 +40,10 @@
         <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#777"/></svg>
 
         <div class="container">
-          <div class="carousel-caption text-end">
-            <h1>One more for good measure.</h1>
-            <p>Some representative placeholder content for the third slide of this carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+          <div class="carousel-caption text-start">
+            <h1>Попробуй бесплатно!</h1>
+            <p>Бесплатный пробный период для новых пользователей</p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'signin' %}">Попробовать</a></p>
           </div>
         </div>
       </div>
@@ -67,27 +67,43 @@
 
     <!-- Three columns of text below the carousel -->
     <div class="row">
-      <div class="col-lg-4">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+        <h2 class="text-center mb-5">Тарифные планы</h2>
+          <div class="col-lg-3 bg-dark text-center p-5">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
 
-        <h2 class="fw-normal">Heading</h2>
-        <p>Some representative placeholder content for the three columns of text below the carousel. This is the first column.</p>
-        <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-      </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+            <h2 class="fw-normal">Тестер</h2>
+            <p>Для вас и вашего воображаемого друга.</p>
+            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
 
-        <h2 class="fw-normal">Heading</h2>
-        <p>Another exciting bit of representative placeholder content. This time, we've moved on to the second column.</p>
-        <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-      </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+          <div class="col-lg-3 bg-info text-center">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
 
-        <h2 class="fw-normal">Heading</h2>
-        <p>And lastly this, the third column of representative placeholder content.</p>
-        <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
-      </div><!-- /.col-lg-4 -->
+            <h2 class="fw-normal">Ламповый</h2>
+            <p>Для вас и вашего воображаемого друга.</p>
+            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
+
+          <div class="col-lg-3 bg-danger text-center">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+
+            <h2 class="fw-normal">Вечеринка</h2>
+            <p>Для вас и вашего сообщества.</p>
+            <p class="text-start">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-dark">1</li>
+                <li>2</li>
+            </ul>
+            </p>
+            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
+          <div class="col-lg-3 bg-gold text-center">
+            <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 140x140" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#777" dy=".3em">140x140</text></svg>
+
+            <h2 class="fw-normal">Королевский</h2>
+            <p>Для вас и вашего бизнеса.</p>
+            <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+          </div><!-- /.col-lg-4 -->
     </div><!-- /.row -->
 
 

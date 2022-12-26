@@ -7,8 +7,6 @@ from django.views.generic import CreateView, ListView, DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 
-
-
 from app.forms import AppEditForm, CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm
 from app.models import App
 
