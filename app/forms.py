@@ -16,6 +16,15 @@ class AppEditForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
+class AppCreateForm(forms.Form):
+    title = forms.CharField(label='Название', max_length=50, strip=True)
+    description = forms.CharField(label='Описание', widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}), required=False, strip=True)
+    file = forms.FileField(label='Файл', widget=forms.FileInput)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

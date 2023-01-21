@@ -1,14 +1,19 @@
+import os
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, FormView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 
-from app.forms import AppEditForm, CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm
-from app.models import App
+from app.forms import AppEditForm, CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm, \
+    AppCreateForm
+from app.models import App, AppStatus
+from app.tasks import *
 
 
 @login_required
@@ -35,6 +40,60 @@ def app(request, pk):
 
 
 @login_required
+def app_start(request, pk):
+    app = App.objects.get(pk=pk, user=request.user)
+    app.app_status = AppStatus.objects.get(pk=2)
+    app.save()
+    start_container.s(pk).apply_async()
+    return redirect('dashboard')
+
+
+@login_required
+def app_stop(request, pk):
+    app = App.objects.get(pk=pk, user=request.user)
+    app.app_status = AppStatus.objects.get(pk=1)
+    app.save()
+    stop_container.s(pk).apply_async()
+    return redirect('dashboard')
+
+
+@login_required
+def app_restart(request, pk):
+    app = App.objects.get(pk=pk, user=request.user)
+    app.app_status = AppStatus.objects.get(pk=3)
+    app.save()
+    restart_container.s(pk).apply_async()
+    return redirect('dashboard')
+
+
+@login_required
+def app_delete(request, pk):
+    App.objects.get(pk=pk, user=request.user).delete()
+    delete_container.s(pk).apply_async()
+    return redirect('dashboard')
+
+
+@login_required
+def app_status(request):
+    apps_list = App.objects.filter(user_id=request.user.pk)
+    apps = {}
+    for app in apps_list:
+        app_status = app.app_status
+        status = {
+            'id_status': app_status.pk,
+            # 'name_status': app_status.status,
+            'color': app_status.color,
+            'permission_start': app.app_status.permission_start,
+            'permission_stop': app.app_status.permission_stop,
+            'permission_restart': app.app_status.permission_restart,
+            'permission_delete': app.app_status.permission_delete
+
+        }
+        apps[app.pk] = {'status': status}
+    return JsonResponse(apps)
+
+
+@login_required
 def edit_app(request, pk):
     app = App.objects.get(pk=pk)
     return HttpResponse(AppEditForm(instance=app).as_p())
@@ -46,7 +105,7 @@ def test(request, pk):
                'app': app}
     return render(request, 'app/test.html', context)
 
-
+@login_required
 def logoutUser(request):
     logout(request)
     res = redirect('signin')
@@ -80,4 +139,28 @@ class LoginUser(LoginView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page_name'] = 'Вход'
+        return context
+
+
+class CreateApp(FormView):
+    form_class = AppCreateForm
+    template_name = 'app/add_app.html'
+
+    @login_required
+    def form_valid(self, form):
+        app = App.objects.create(user=self.request.user, title=form.data['title'], description=form.data['description'])
+
+        path = f'app/docker_task/{app.pk}'
+        os.mkdir(path)
+
+        fs = FileSystemStorage(location=path)
+        fs.save(f'{app.pk}.zip', form.files['file'])
+
+        # create_container.delay(app.pk)
+        create_container.s(app.pk).apply_async()
+        return redirect('dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'Создание приложения'
         return context

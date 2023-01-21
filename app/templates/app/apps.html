@@ -6,24 +6,22 @@
   <div class="d-flex align-items-center p-3 my-3 text-white bg-dark rounded shadow-sm">
     <img class="me-3" src="{% static 'app/icons/upload.svg' %}" alt="" width="20" >
 
-      <div class="lh-1">
-      <h1 class="h6 mb-0 text-white lh-1">Добавить приложение</h1>
-      <small>Перетащите архив на эту область для загрузки приложения</small>
-    </div>
+      <a class="text-decoration-none text-reset" href="{% url 'add_app' %}">
+          <div class="lh-1">
+              <h1 class="h6 mb-0 text-white lh-1">Добавить приложение</h1>
+              <small>Нажмите на эту область для загрузки приложения</small>
+        </div>
+      </a>
   </div>
 
   <div class="my-3 p-3 bg-body rounded shadow-sm">
     <h6 class="border-bottom pb-2 mb-0">Приложения</h6>
   {% for app in apps %}
-    <div class="d-flex text-muted pt-3">
+    <div id="{{ app.pk }}" class="app d-flex text-muted pt-3">
       <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32">
           <rect width="100%" height="100%"
-                fill="
-                {% if app.is_run %}
-                    #3dd474
-                {% else %}
-                    #eb4034
-                {% endif %}"></rect>
+                fill="{{ app.app_status.color }}">
+          </rect>
       </svg>
 
       <div class="container">
@@ -33,19 +31,19 @@
         </p>
       </div>
 
-      <div class="container">
-        <button type="button" onclick="getData({{ app.pk }})" class="btn btn-{% if app.is_run %}secondary{% else %}success{% endif %}" {% if app.is_run %}disabled="disabled"{% endif %}>
+      <div class="buttons container">
+        <a type="button" href="{{ app.pk }}/start/" class="start btn btn-{% if app.app_status.permission_start %}success{% else %}secondary disabled{% endif %}">
           <i class="bi bi-caret-right-fill"></i>
-        </button>
-        <button type="button" class="btn btn-{% if app.is_run %}primary{% else %}secondary{% endif %}" {% if not app.is_run %}disabled="disabled"{% endif %}>
+        </a>
+        <a type="button" href="{{ app.pk }}/stop/" class="stop btn btn-{% if app.app_status.permission_stop %}primary{% else %}secondary disabled{% endif %}">
           <i class="bi bi-pause-fill"></i>
-        </button>
-        <button type="button" class="btn btn-{% if app.is_run %}primary{% else %}secondary{% endif %}" {% if not app.is_run %}disabled="disabled"{% endif %}>
+        </a>
+        <a type="button" href="{{ app.pk }}/restart/" class="restart btn btn-{% if app.app_status.permission_restart %}primary{% else %}secondary disabled{% endif %}">
           <i class="bi bi-arrow-clockwise"></i>
-        </button>
-        <button type="button" class="btn btn-{% if app.is_run %}secondary{% else %}danger{% endif %}" {% if app.is_run %}disabled="disabled"{% endif %}>
+        </a>
+        <a type="button"  href="{{ app.pk }}/delete/" class="delete btn btn-{% if app.app_status.permission_delete %}danger{% else %}secondary disabled{% endif %}">
           <i class="bi bi-trash-fill"></i>
-        </button>
+        </a>
       </div>
     </div>
   {% endfor %}
@@ -96,7 +94,91 @@
     xhr.send();
   }
 
+  async function getStatus(){
+
+      let block = document.querySelectorAll('.app')
+
+      let apps = await fetch(`/appStatus/`)
+
+      let js = await apps.json()
+
+      console.log(js)
+
+
+        for (const element of block) {
+            let id = element.id
+
+            let color = js[id].status.color
+            const svg = element.querySelector('svg rect')
+            svg.style.fill = color
+
+
+            const buttons = element.querySelector('.buttons')
+
+            let button = buttons.querySelector('.start')
+            if (js[id].status.permission_start) {
+                button.classList.remove("btn-secondary");
+                button.classList.remove("disabled");
+                button.classList.add("btn-success");
+            }
+            else {
+                button.disabled = 'disabled'
+                button.classList.add("btn-secondary");
+                button.classList.add("disabled");
+                button.classList.remove("btn-success");
+            }
+
+            button = buttons.querySelector('.stop')
+            if (js[id].status.permission_stop) {
+                button.classList.remove("btn-secondary");
+                button.classList.remove("disabled");
+                button.classList.add("btn-primary");
+            }
+            else {
+                button.disabled = 'disabled'
+                button.classList.remove("btn-primary");
+                button.classList.add("disabled");
+                button.classList.add("btn-secondary");
+            }
+
+            button = buttons.querySelector('.restart')
+            if (js[id].status.permission_restart) {
+                button.classList.remove("disabled");
+                button.classList.remove("btn-secondary");
+                button.classList.add("btn-primary");
+            }
+            else {
+                button.classList.add("disabled");
+                button.classList.remove("btn-primary");
+                button.classList.add("btn-secondary");
+            }
+
+            button = buttons.querySelector('.delete')
+            if (js[id].status.permission_delete) {
+                button.classList.remove("disabled");
+                button.classList.remove("btn-secondary");
+                button.classList.add("btn-danger");
+            }
+            else {
+                button.classList.add("disabled");
+                button.classList.remove("btn-danger");
+                button.classList.add("btn-secondary");
+            }
+
+
+
+          {#element.querySelector('svg rect').fill = color#}
+          {#element.innerHTML +=`<svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32"><rect width="100%" height="100%"fill="${color}"></rect></svg>`#}
+      }
+
+
+      {#console.log(block)#}
+
+  }
+        setInterval(getStatus, 5000)
+    {#getStatus()#}
   </script>
+
 {#    <div class="d-flex text-muted pt-3">#}
 {#      <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#3dd474"/><text x="50%" y="50%" fill="#3dd474" dy=".3em">32x32</text></svg>#}
 {##}

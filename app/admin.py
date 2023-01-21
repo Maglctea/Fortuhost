@@ -1,5 +1,5 @@
 from django.contrib import admin
-from app.models import App, CustomUser
+from app.models import App, CustomUser, AppStatus
 
 # @admin.register(models.User)
 # class CustomUserAdmin(UserAdmin):
@@ -37,3 +37,4 @@ from app.models import App, CustomUser
 
 admin.site.register(App)
 admin.site.register(CustomUser)
+admin.site.register(AppStatus)
