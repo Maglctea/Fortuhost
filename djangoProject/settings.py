@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os.path
+from dotenv import load_dotenv
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -21,10 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-1#k^z(^-r3s%evxn2mp-1ggf1!i8#_akyr^hmn&agms^*uijy_'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Load dot_env
+dot_env = BASE_DIR / '.env'
+load_dotenv(dotenv_path=dot_env)
 
-ALLOWED_HOSTS = []
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = (os.getenv('DEBUG', 'False') == 'True')
+
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app.apps.AppConfig',
     'django_celery_results',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -73,12 +81,28 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('ENV_TYPE') != 'local':
+    STATIC_ROOT = BASE_DIR / 'static'
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'lms',
+            'USER': 'postgres',
+        }
     }
-}
+else:
+    STATICFILES_DIRS = (
+        BASE_DIR / 'static/',
+    )
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -103,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -113,8 +137,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_DIRS = []
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -135,8 +157,33 @@ CACHES = {
         'LOCATION': 'redis://127.0.0.1:16379/1',
     }
 }
+# Настройка логгирования
+LOG_FILE = BASE_DIR / 'log' / 'main_log.log'
+
+LOGGING = {
+    'version': 1,
+    'disable_exciting_loggers': False,  # Отключить сторонние логгеры
+    'formatters': {  # Формат логов. Название + формат
+        'console': {
+            'format': '[%(asctime)s] %(levelname)s %(name)s (%(lineno)d) %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',  # Максимальный уровень логов. Все, что отсюда и ниже до error
+            'class': 'logging.FileHandler',
+            'filename': LOG_FILE,
+            'formatter': 'console'
+        },
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'console'},
+    },
+    'loggers': {
+        'django': {'level': 'INFO', 'handlers': ['file', 'console']}
+    }
+}
 
 CELERY_CACHE_BACKEND = 'default'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media directory in the root directory

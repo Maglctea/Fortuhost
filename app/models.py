@@ -47,7 +47,7 @@ class App(models.Model):
     time_create = models.DateTimeField('Время создания', auto_now_add=True)
     time_update = models.DateTimeField('Время обновления', auto_now=True)
     time_start = models.DateTimeField('Время запуска', auto_now=True)
-    app_status = models.ForeignKey(AppStatus, on_delete=models.PROTECT, verbose_name='Статус', related_name='users', default=3)
+    app_status = models.ForeignKey(AppStatus, on_delete=models.PROTECT, verbose_name='Статус', related_name='app_statuss', default=3)
 
     class Meta:
         verbose_name = "Приложение"

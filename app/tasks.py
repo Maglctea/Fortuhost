@@ -62,3 +62,16 @@ def restart_container(id_app):
 def delete_container(id_app):
     delete_app(id_app)
     return f'Container {id_app} delited'
+
+
+@shared_task
+def update_status_container():
+    apps = App.objects.all()
+    for app in apps:
+        id_status = get_status(app.docker_id)
+
+        if id_status == -1:
+            id_status = 3
+
+        app.app_status = AppStatus.objects.get(pk=id_status)
+        app.save()

@@ -12,7 +12,7 @@ urlpatterns = [
     path('apps/<int:pk>/restart/', app_restart, name='app_restart'),
     path('apps/<int:pk>/delete/', app_delete, name='app_delete'),
 
-    path('app/<int:pk>/', edit_app, name='app'),
+    path('app/<int:pk>/', EditApp.as_view(), name='edit_app'),
     path('app/', CreateApp.as_view(), name='add_app'),
     # path('signup/', register_user, name='register'),
     path('signup/', RegisterUser.as_view(), name='signup'),

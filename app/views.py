@@ -2,17 +2,19 @@ import os
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, FormView
+from django.views.generic import CreateView, ListView, DetailView, FormView, UpdateView
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
 
 from app.forms import AppEditForm, CustomUserCreationForm, CustomUserChangeForm, CustomUserAuthenticationForm, \
     AppCreateForm
 from app.models import App, AppStatus
+from django.http import Http404
 from app.tasks import *
 
 
@@ -37,6 +39,7 @@ def app(request, pk):
                'page_name': 'Приложение'}
 
     return render(request, 'app/app.html', context)
+
 
 
 @login_required
@@ -146,7 +149,6 @@ class CreateApp(FormView):
     form_class = AppCreateForm
     template_name = 'app/add_app.html'
 
-    @login_required
     def form_valid(self, form):
         app = App.objects.create(user=self.request.user, title=form.data['title'], description=form.data['description'])
 
@@ -164,3 +166,26 @@ class CreateApp(FormView):
         context = super().get_context_data(**kwargs)
         context['page_name'] = 'Создание приложения'
         return context
+
+
+class EditApp(LoginRequiredMixin, UpdateView):
+    login_url = '/signin/'
+    redirect_field_name = 'signin'
+    form_class = AppEditForm
+    template_name = 'app/edit_app.html'
+    model = App
+
+    success_url = reverse_lazy('dashboard')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_name'] = 'Изменение приложения'
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.pk is None:
+            return redirect('signin')
+        get_object_or_404(App, pk=kwargs['pk'], user=request.user)
+        return super(EditApp, self).dispatch(request, *args, **kwargs)
+
+

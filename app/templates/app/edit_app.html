@@ -1,0 +1,20 @@
+{% extends 'app/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="nav-scroller bg-body shadow-sm m-5"></div>
+
+    <main class="form-signin w-100 m-auto ">
+        <div class="container">
+            <form method="post" enctype="multipart/form-data" class="col-6 text-center">
+                <img class="mb-4" src="{% static 'app/images/logo.png' %}" alt="" width="72">
+                <h1 class="h3 mb-3 fw-normal">Изменение приложения</h1>
+                <div class="text-start">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                </div>
+                <button class="w-100 btn btn-lg btn-primary" type="submit">Изменить приложение</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

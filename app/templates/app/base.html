@@ -36,6 +36,11 @@
                     <li class="nav-item">
                       <a class="nav-link disabled" href="#">Документация</a>
                     </li>
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/">Админ панель</a>
+                        </li>
+                    {% endif %}
                     </ul>
                     {% if request.user.is_authenticated %}
                         <button class="btn btn-close-white nav-item dropdown">
