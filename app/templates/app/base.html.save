@@ -1,0 +1,83 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="Sherbakov Dananiil">
+        <meta name="generator" content="Hugo 0.104.2">
+        <title>FortuHost - {{ page_name }}</title>
+        
+	<link rel="shortcut icon" href="{% static 'app/images/logo.png' %}" type="image/png">
+	<link rel="icon" href="{% static 'app/images/favicon.png' %}" type="image/png" >
+
+        <link rel="stylesheet" type="text/css" href="{% static 'app/css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'app/css/offcanvas.css' %}">
+        <link rel="stylesheet" href="{% static 'app/icons/bootstrap-icons.css' %}">
+
+
+    </head>
+    <body class="bg-light">
+
+        <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'main' %}" lang="ru"><img class="me-3" src="{% static 'app/icons/logo.png' %}" alt="" width="30">FortuHost</a>
+                <button class="navbar-toggler p-0 border-0" type="button" id="navbarSideCollapse" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Управление</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                      <a class="nav-link disabled" href="#">Документация</a>
+                    </li>
+                    {% if request.user.is_superuser %}
+                        <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/admin/">Админ панель</a>
+                        </li>
+                    {% endif %}
+                    </ul>
+                    {% if request.user.is_authenticated %}
+                        <button class="btn btn-close-white nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{ request.user }}</a>
+                            <ul class="dropdown-menu ">
+                                <li><a class="dropdown-item disabled" href="#"><i class="bi bi-person"></i> Профиль</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item disabled" href="#"><i class="bi bi-bell"></i> Уведомления <span class="badge bg-primary rounded-pill align-text-bottom">27</span></a></li>
+                                <li><a class="dropdown-item disabled" href="#"><i class="bi bi-wallet2"></i> Кошелёк <span class="badge bg-primary rounded-pill align-text-bottom">{{ request.user.wallet }} ₽</span></a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item disabled" href="#"><i class="bi bi-nut"></i> Настройки</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Выход</a></li>
+                            </ul>
+                        </button>
+                    {% else %}
+                       <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                          <a class="nav-link card-link" aria-current="page" href="{% url 'signin' %}">Вход</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="{% url 'signup' %}">Регистрация</a>
+                        </li>
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+
+        {% block menu %}
+        {% endblock %}
+
+        {% block content %}
+        {% endblock %}
+
+        <script src="{% static 'app/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'app/js/offcanvas.js' %}"></script>
+    </body>
+</html>
