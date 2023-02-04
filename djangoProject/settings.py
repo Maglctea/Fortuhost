@@ -102,7 +102,7 @@ if os.getenv('ENV_TYPE') != 'local':
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'fortuhost',
             'USER': 'django',
-            'PASSWORD': 'Mexanik_X3000',
+            'PASSWORD': os.getenv('DATABASE_PASSWORD'),
             'HOST': '127.0.0.1',
             'PORT': '5432',
         }
