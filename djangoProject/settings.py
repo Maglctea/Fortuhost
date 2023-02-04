@@ -10,13 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os.path
+
+from django.conf.global_settings import EMAIL_HOST_PASSWORD
 from dotenv import load_dotenv
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -75,7 +75,7 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'accounts/templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -100,8 +100,11 @@ if os.getenv('ENV_TYPE') != 'local':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'lms',
-            'USER': 'postgres',
+            'NAME': 'fortuhost',
+            'USER': 'django',
+            'PASSWORD': 'Mexanik_X3000',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
         }
     }
 else:
@@ -115,7 +118,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -198,7 +200,6 @@ LOGGING = {
 CELERY_CACHE_BACKEND = 'default'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
-
 # SMTP
 EMAIL_HOST = 'smtp.beget.com'
 EMAIL_PORT = 2525
@@ -206,7 +207,6 @@ EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
-
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
@@ -225,8 +225,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media directory in the root directory
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # media directory in the root directory
 MEDIA_URL = '/media/'
 
 # allauth
