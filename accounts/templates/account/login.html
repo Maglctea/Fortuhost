@@ -1,0 +1,51 @@
+{% extends "account/base.html" %}
+{% load i18n %}
+{% load static account socialaccount %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'app/css/signin.css' %}">
+
+
+
+<main class="form-signin w-100 m-auto">
+    <form class="login text-center" method="POST" action="{% url 'account_login' %}">
+    <img class="mb-4" src="{% static 'app/images/logo.png' %}" alt="" width="72">
+    <h1 class="h2 mb-3 fw-normal">{% trans "Sign In" %}</h1>
+
+      {% csrf_token %}
+      {% for error in form.non_field_errors %}
+        <p class="text-danger">
+            {{ error }}
+        </p>
+      {% endfor %}
+        {% for field in form %}
+            {% if  field.name != 'remember' %}
+            <div class="form-floating">
+                {{ field }}
+              <label for="floatingInput">{{ field.label }}</label>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <div class="form-form-check text-start">
+            <input type="checkbox" name="remember" class="form-check-input" id="id_remember">
+            <label for="floatingInput" class="form-check-label">Запомнить меня</label>
+        </div>
+    <button class="w-100 btn btn-lg btn-primary mb-2" type="submit">Войти</button>
+    <a class="link-info" href="{% provider_login_url "google" %}"><h3 class="bi bi-google" ></h3></a>
+
+    <div class="checkbox mb-3">
+      <label>
+        Еще не аккаунта? <a href="{{ signup_url }}" class="link-info">зарегистрироваться</a>
+      </label>
+    </div>
+  </form>
+</main>
+
+
+
+  {% if redirect_field_value %}
+    <input name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+  {% endif %}
+
+{% endblock %}
