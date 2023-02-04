@@ -1,4 +1,7 @@
-{% load static %}
+{% load static account socialaccount %}
+{% load i18n %}
+
+
 <!doctype html>
 <html lang="ru">
     <head>
@@ -36,6 +39,9 @@
                     <li class="nav-item">
                       <a class="nav-link disabled" href="#">Документация</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'support' %}">Поддержка</a>
+                    </li>
                     {% if request.user.is_superuser %}
                         <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/admin/">Админ панель</a>
@@ -43,9 +49,9 @@
                     {% endif %}
                     </ul>
                     {% if request.user.is_authenticated %}
-                        <button class="btn btn-close-white nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{{ request.user }}</a>
-                            <ul class="dropdown-menu ">
+                        <button class="btn btn-close-white nav-item dropdown" style="min-width: 200px; max-width: 50%">
+                            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">{% user_display user %}</a>
+                            <ul class="dropdown-menu-right dropdown-menu">
                                 <li><a class="dropdown-item disabled" href="#"><i class="bi bi-person"></i> Профиль</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item disabled" href="#"><i class="bi bi-bell"></i> Уведомления <span class="badge bg-primary rounded-pill align-text-bottom">27</span></a></li>
@@ -53,16 +59,15 @@
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item disabled" href="#"><i class="bi bi-nut"></i> Настройки</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Выход</a></li>
+                                <li><a class="dropdown-item" href="{% url 'account_logout' %}"><i class="bi bi-box-arrow-right"></i> Выход</a></li>
                             </ul>
                         </button>
                     {% else %}
                        <ul class="navbar-nav mb-2 mb-lg-0">
                         <li class="nav-item">
-                          <a class="nav-link card-link" aria-current="page" href="{% url 'signin' %}">Вход</a>
+                          <a class="nav-link card-link" aria-current="page" href="{% url 'account_login' %}">Войти</a>
                         </li>
                         <li class="nav-item">
-                          <a class="nav-link" href="{% url 'signup' %}">Регистрация</a>
                         </li>
                         </ul>
                     {% endif %}

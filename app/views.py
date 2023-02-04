@@ -20,7 +20,7 @@ from app.tasks import *
 
 @login_required
 def dashboard(request):
-    context = {'apps': App.objects.filter(user_id=request.user.pk),
+    context = {'apps': App.objects.filter(user_id=request.user.pk).order_by('-pk'),
                'page_name': 'Приложения'}
     return render(request, 'app/apps.html', context)
 

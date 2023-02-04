@@ -28,7 +28,7 @@ def create_container(id_app):
     app = App.objects.get(pk=id_app)
     status = AppStatus.objects.get(pk=get_status(id_app))
     app.app_status = status
-    app.docker_id = client.containers.get(str(id_app)).id
+    app.docker_id = client.containers.get(str(id_app)).short_id
     app.save()
 
     shutil.rmtree(f'app/docker_task/{id_app}')

@@ -32,7 +32,7 @@
       </div>
 
       <div class="buttons container">
-        <a type="button" href="{{ app.pk }}/start/" class="start btn btn-{% if app.app_status.permission_start %}success{% else %}secondary disabled{% endif %}">
+        <a type="button" href="{% url 'app_start' pk=app.pk %}" class="start btn btn-{% if app.app_status.permission_start %}success{% else %}secondary disabled{% endif %}">
           <i class="bi bi-caret-right-fill"></i>
         </a>
         <a type="button" href="{{ app.pk }}/stop/" class="stop btn btn-{% if app.app_status.permission_stop %}primary{% else %}secondary disabled{% endif %}">

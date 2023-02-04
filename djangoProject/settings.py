@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os.path
+
+from django.conf.global_settings import EMAIL_HOST_PASSWORD
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -42,9 +44,22 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
     'app.apps.AppConfig',
+    'accounts.apps.AccountsConfig',
+    'support.apps.MailConfig',
+
     'django_celery_results',
     'django_celery_beat',
+
+    'rest_framework',
+    'rest_framework.authtoken',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +77,7 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'accounts/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -106,7 +121,7 @@ else:
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
-AUTH_USER_MODEL = 'app.CustomUser'
+AUTH_USER_MODEL = 'accounts.CustomUser'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -186,5 +201,71 @@ CELERY_CACHE_BACKEND = 'default'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 
+# SMTP
+EMAIL_HOST = 'smtp.beget.com'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # media directory in the root directory
 MEDIA_URL = '/media/'
+
+# allauth
+SITE_ID = 1
+# ACCOUNT_DEFAULT_HTTP_PROTOCOL='https'
+ACCOUNT_FORMS = {
+    'login': 'accounts.forms.MyCustomLoginForm',
+    'signup': 'accounts.forms.MyCustomSignupForm',
+    'add_email': 'allauth.account.forms.AddEmailForm',
+    'change_password': 'allauth.account.forms.ChangePasswordForm',
+    'set_password': 'allauth.account.forms.SetPasswordForm',
+    'reset_password': 'allauth.account.forms.ResetPasswordForm',
+    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
+    'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# ACCOUNT_EMAIL_VERIFICATION = "none"
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        "APP": {
+            "client_id": "830970087727-u0p27c4386oeu88dvh0159pkq4puaoev.apps.googleusercontent.com",
+            "secret": "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",
+            "key": ""
+        },
+        # These are provider-specific settings that can only be
+        # listed here:
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
+    }
+}
