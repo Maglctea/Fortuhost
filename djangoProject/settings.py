@@ -75,7 +75,7 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
+        'DIRS': [os.path.join(BASE_DIR, 'accounts/templates')]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -100,11 +100,8 @@ if os.getenv('ENV_TYPE') != 'local':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'fortuhost',
-            'USER': 'django',
-	    'PASSWORD': 'Mexanik_X3000',
-	    'HOST': '127.0.0.1',
-	    'PORT': '5432',
+            'NAME': 'lms',
+            'USER': 'postgres',
         }
     }
 else:
