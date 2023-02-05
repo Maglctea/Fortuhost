@@ -14,8 +14,8 @@ class FeedbackType(models.Model):
 
 class Feedback(models.Model):
     feedback_type = models.ForeignKey(FeedbackType, on_delete=models.CASCADE, verbose_name='Тип обращения', related_name='feedbacks')
-    subject = models.CharField('Тема обращения', max_length=50, blank=True)
-    content = models.TextField('Описание', blank=True)
+    subject = models.CharField('Тема обращения', max_length=50)
+    content = models.TextField('Описание')
     file = models.FileField('Файл', blank=True)
 
     class Meta:

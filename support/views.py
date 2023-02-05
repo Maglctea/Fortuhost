@@ -14,22 +14,11 @@ class BugReport(CreateView):
 
     def form_valid(self, form):
         form.save()
-        send_mail('Обработка багрепорта', 'Отчет принят в обработку. Спасибо за обращение', f'Fortuhost <{EMAIL_HOST_USER}>', [self.request.user.email])
+        if self.request.user.email:
+            msg = f'Отчет по теме «{form.data["subject"]}» принят в обработку. Спасибо за обращение'
+            send_mail('Обработка обращение', msg, f'Fortuhost <{EMAIL_HOST_USER}>', [self.request.user.email])
         return redirect('dashboard')
 
-    # support = send_mail(form.changed_data['subject'], form.changed_data['content'], EMAIL_HOST_USER, [self.request.user.email], fail_silently=True)
-
-    #     app = App.objects.create(user=self.request.user, title=form.data['title'], description=form.data['description'])
-    #
-    #     path = f'app/docker_task/{app.pk}'
-    #     os.mkdir(path)
-    #
-    #     fs = FileSystemStorage(location=path)
-    #     fs.save(f'{app.pk}.zip', form.files['file'])
-    #
-    #     # create_container.delay(app.pk)
-    #     create_container.s(app.pk).apply_async()
-    #     return redirect('dashboard')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

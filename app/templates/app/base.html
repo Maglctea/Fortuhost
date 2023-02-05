@@ -26,7 +26,7 @@
 
     </head>
     <body class="bg-light">
-
+        {% with request.resolver_match.url_name as url_name %}
         <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark" aria-label="Main navigation">
             <div class="container-fluid">
                 <a class="navbar-brand" href="{% url 'main' %}" lang="ru"><img class="me-3" src="{% static 'app/icons/logo.svg' %}" alt="" width="30">FortuHost</a>
@@ -38,14 +38,23 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% if request.user.is_authenticated %}
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Управление</a>
+                            {% if url_name == 'dashboard' %}
+                                <a class="nav-link active" aria-current="page" href="{% url 'dashboard' %}">Управление</a>
+                            {% else %}
+                                <a class="nav-link" aria-current="page" href="{% url 'dashboard' %}">Управление</a>
+                            {% endif %}
+
                         </li>
                     {% endif %}
                     <li class="nav-item">
                       <a class="nav-link disabled" href="#">Документация</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="{% url 'support' %}">Поддержка</a>
+                        {% if url_name == 'support' %}
+                            <a class="nav-link active" href="{% url 'support' %}">Поддержка</a>
+                        {% else %}
+                            <a class="nav-link" aria-current="page" href="{% url 'support' %}">Поддержка</a>
+                        {% endif %}
                     </li>
                     {% if request.user.is_superuser %}
                         <li class="nav-item">
@@ -79,6 +88,7 @@
                 </div>
             </div>
         </nav>
+        {% endwith %}
 
         {% block menu %}
         {% endblock %}
