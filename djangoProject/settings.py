@@ -158,9 +158,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGIN_URL = 'signin'
-
 CELERY_BROKER_URL = 'redis://127.0.0.1:16379/0'
 
 CELERY_RESULT_BACKEND = 'django-db'
@@ -201,10 +198,13 @@ CELERY_CACHE_BACKEND = 'default'
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # SMTP
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.beget.com'
 EMAIL_PORT = 2525
 EMAIL_HOST_USER = os.getenv('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
+DEFAULT_FROM_EMAIL = os.getenv('EMAIL_USER')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
 
@@ -242,5 +242,15 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# django-allauth
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 5  # Определяет срок действия писем с подтверждением по электронной почте
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Вход на сайт по логину и почте
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # Когда установлено «mandatory», пользователь блокируется от входа, пока адрес электронной почты не будет подтвержден.
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 10  # Количество попыток не удачного ввода логина и пароля. После пользователь блокируется.
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Время блокировки пользователя в секундах после количества не удачного ввода логина и пароля.
+ACCOUNT_EMAIL_REQUIRED = True
+LOGIN_REDIRECT_URL = 'dashboard'
+# LOGIN_URL = 'signin'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # ACCOUNT_EMAIL_VERIFICATION = "none"
