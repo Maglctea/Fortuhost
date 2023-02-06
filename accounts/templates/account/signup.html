@@ -11,7 +11,7 @@
 
 <main class="form-signin w-100 m-auto text-center">
     <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-    <img class="mb-4" src="{% static 'app/images/logo.png' %}" alt="" width="72">
+    <img class="mb-4" src="{% static 'app/images/logo.svg' %}" alt="" width="80">
     <h1 class="h3 mb-3 fw-normal">{% trans "Sign Up" %}</h1>
 
       {% csrf_token %}

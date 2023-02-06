@@ -241,6 +241,11 @@ ACCOUNT_FORMS = {
     'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
 }
 
+SOCIALACCOUNT_FORMS = {
+    'disconnect': 'allauth.socialaccount.forms.DisconnectForm',
+    'signup': 'accounts.social_forms.MyCustomSocialSignupForm',
+}
+
 # django-allauth
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # Определяет срок действия писем с подтверждением по электронной почте
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Вход на сайт по логину и почте
