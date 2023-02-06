@@ -1,12 +1,12 @@
 {% extends "account/email/base_message.txt" %}
 {% load i18n %}
 
-{% block content %}{% autoescape off %}{% blocktrans %}You are receiving this e-mail because you or someone else has requested a
-password for your user account. However, we do not have any record of a user
-with email {{ email }} in our database.
+{% block content %}{% autoescape off %}{% blocktrans %}Вы получили это электронное письмо, так как запросили сброс
+пароля для Вашей учетной записи пользователя. У нас нет информации о пользователе с электронной почтой {{ email }}.
 
-This mail can be safely ignored if you did not request a password reset.
+Вы можете зарегистрировать новый аккаунт по этой ссылке: {{ signup_url }}
 
-If it was you, you can sign up for an account using the link below.{% endblocktrans %}
+Его Вы не запрашивали сброс пароля, проигнорируйте это письмо.
 
-{{ signup_url }}{% endautoescape %}{% endblock %}
+{% endblocktrans %}
+{% endautoescape %}{% endblock %}

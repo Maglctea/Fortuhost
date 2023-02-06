@@ -1,12 +1,18 @@
 {% extends "account/base.html" %}
 
-{% load i18n %}
+{% load static i18n %}
 
 {% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
 
 {% block content %}
-    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+    <link rel="stylesheet" href="{% static 'app/css/signin.css' %}">
+    <div class="container text-center col-lg-6">
+        <img src="{% static 'app/images/logo.svg' %}" alt="" width="80">
+        <h1>{% trans "Verify Your E-mail Address" %}</h1>
 
-    <p>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. If you do not see the verification e-mail in your main inbox, check your spam folder. Please contact us if you do not receive the verification e-mail within a few minutes.{% endblocktrans %}</p>
-
+        <p class="text-start">{% blocktrans %}Мы отправили Вам электронное письмо для проверки. Перейдите по ссылке
+            ниже, чтобы завершить процесс регистрации. Если Вы не видите письмо с подтверждением в своем почтовом ящике,
+            проверьте папку со спамом. Пожалуйста, свяжитесь с нами, если Вы не получили электронное письмо с
+            подтверждением в течение нескольких минут.{% endblocktrans %}</p>
+    </div>
 {% endblock %}

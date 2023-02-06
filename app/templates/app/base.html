@@ -10,7 +10,8 @@
         <meta name="description" content="">
         <meta name="author" content="Sherbakov Dananiil">
         <meta name="generator" content="Hugo 0.104.2">
-        <title>FortuHost - {{ page_name }}</title>
+{#        <title>FortuHost - {{ page_name }}</title>#}
+        <title>FortuHost - {% block head_title %}{% endblock %}</title>
         
 	<link rel="icon" href="{% static 'app/images/logo.svg' %}">
 	<link rel="apple-touch-icon" href="{% static 'app/images/logo.svg' %}" sizes="32x32">
@@ -58,7 +59,7 @@
                     </li>
                     {% if request.user.is_superuser %}
                         <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/admin/">Админ панель</a>
+                        <a class="nav-link" aria-current="page" href="/admin/">Админ панель</a>
                         </li>
                     {% endif %}
                     </ul>
