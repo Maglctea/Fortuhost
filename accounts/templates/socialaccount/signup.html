@@ -8,23 +8,21 @@
     <link rel="stylesheet" href="{% static 'app/css/signin.css' %}">
 
 
-    <h1>{% trans "Sign Up" %}</h1>
-    <div class="container col-lg-6 text-center">
-
-        <img src="{% static 'app/images/logo.svg' %}" alt="" width="80">
+    <div class="container col-lg-4 text-center">
+	<img src="{% static 'app/images/logo.svg' %}" alt="" width="80">
+	<h1>{% trans "Sign Up" %}</h1>
         <p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}Вы используете
             {{ provider_name }} для авторизации на
-            {{ site_name }}. Чтобы завершить, заполните следующую форму:{% endblocktrans %}</p>
+            {{ site_name }}. Чтобы завершить регистрацию, заполните следующую форму:{% endblocktrans %}</p>
 
         <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
             {% csrf_token %}
             {% for field in form %}
-                <div class="form-floating">
+                <div class="form-floating mb-2">
                     {{ field }}
                     <label for="floatingInput">{{ field.label }}</label>
                 </div>
             {% endfor %}
-            {{ form.as_p }}
             <button class="btn btn-primary" type="submit">{% trans "Sign Up" %} &raquo;</button>
         </form>
     </div>
