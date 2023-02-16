@@ -5,10 +5,10 @@ from yookassaApp.models import TransactionStatus, Currensy, RefundStatus
 
 def fill_transactionStatus_const():
     """ Заполняет таблицу статусов активности приложения"""
-    TransactionStatus.objects.create(name='payment.pending')
-    TransactionStatus.objects.create(name='payment.waiting_for_capture')
-    TransactionStatus.objects.create(name='payment.succeeded')
-    TransactionStatus.objects.create(name='payment.canceled')
+    TransactionStatus.objects.create(name='pending')
+    TransactionStatus.objects.create(name='waiting_for_capture')
+    TransactionStatus.objects.create(name='succeeded')
+    TransactionStatus.objects.create(name='canceled')
 
 
 def fill_refundStatus_const():

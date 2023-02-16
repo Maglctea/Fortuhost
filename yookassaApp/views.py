@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView
 from yookassa import Refund, Receipt, Payment
 from yookassa.domain.common import ConfirmationType, SecurityHelper
@@ -68,7 +69,7 @@ def get_client_ip(request):
 def edit_transaction(token, paymentStatus):
     Transaction.objects.filter(transaction_token=token).update(status=TransactionStatus.objects.get(name=paymentStatus))
 
-
+@csrf_exempt
 def webhook_transaction(request):
     # Проверка, что запрос пришел от ЮКассы:
     ip = get_client_ip(request)  # Получите IP запроса
@@ -76,26 +77,20 @@ def webhook_transaction(request):
         return HttpResponse(status=400)
 
     # Извлечение JSON объекта из тела запроса
-    event_json = json.loads(request.body)
+    response_object = json.loads(request.body)
     try:
         # Создание объекта класса уведомлений в зависимости от события
-        notification_object = WebhookNotificationFactory().create(event_json)
-        response_object = notification_object.object
-        if notification_object.event == WebhookNotificationEventType.PAYMENT_SUCCEEDED:
-            transaction = Transaction.objects.get(transaction_token=response_object.id)
+        if response_object['status'] == 'succeeded':
+            transaction = Transaction.objects.get(transaction_token=response_object['id'])
             user = transaction.user
             user.wallet += transaction.value
             user.save()
-            transaction.status = TransactionStatus.objects.get(name=response_object.status)
+            transaction.status = TransactionStatus.objects.get(name=response_object['status'])
             transaction.save()
-        elif notification_object.event == WebhookNotificationEventType.PAYMENT_WAITING_FOR_CAPTURE:
-            edit_transaction(response_object.id, response_object.status)
-        elif notification_object.event == WebhookNotificationEventType.PAYMENT_CANCELED:
-            edit_transaction(response_object.id, response_object.status)
-        elif notification_object.event == WebhookNotificationEventType.REFUND_SUCCEEDED:
-            transaction = Transaction.objects.get(transaction_token=response_object.payment_id)
-            refund = yookassaApp.models.Refund.objects.get_or_create(refund_token=response_object.id, transaction=transaction)
-            refund.status = RefundStatus.objects.get(name=response_object.status)
+        elif response_object['status'] == 'waiting_for_capture':
+            edit_transaction(response_object['id'], response_object['status'])
+        elif response_object['status'] == 'canceled':
+            edit_transaction(response_object['id'], response_object.status)
         else:
             # Обработка ошибок
             return HttpResponse(status=400)  # Сообщаем кассе об ошибке
