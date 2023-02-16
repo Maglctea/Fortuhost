@@ -5,10 +5,10 @@ from support.models import FeedbackType
 
 def fill_const():
     """ Заполняет таблицу типов обращения в поддержку"""
-    FeedbackType.objects.create('Баг')
-    FeedbackType.objects.create('Жалоба')
-    FeedbackType.objects.create('Предложение')
-    FeedbackType.objects.create('Другое')
+    FeedbackType.objects.create(name='Баг')
+    FeedbackType.objects.create(name='Жалоба')
+    FeedbackType.objects.create(name='Предложение')
+    FeedbackType.objects.create(name='Другое')
 
 
 class Command(BaseCommand):

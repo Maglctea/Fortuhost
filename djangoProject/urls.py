@@ -21,4 +21,5 @@ urlpatterns = [
     path('', include('app.urls')),
     path('support/', include('support.urls')),
     path('accounts/', include('allauth.urls')),
+    path('yookassa/', include('yookassaApp.urls')),
 ]

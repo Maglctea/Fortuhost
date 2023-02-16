@@ -14,6 +14,7 @@ import os.path
 from django.conf.global_settings import EMAIL_HOST_PASSWORD
 from dotenv import load_dotenv
 from pathlib import Path
+from yookassa import Configuration
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'accounts.apps.AccountsConfig',
     'support.apps.MailConfig',
+    'yookassaApp.apps.YookassaappConfig',
 
     'django_celery_results',
     'django_celery_beat',
@@ -246,6 +248,8 @@ SOCIALACCOUNT_FORMS = {
     'signup': 'accounts.social_forms.MyCustomSocialSignupForm',
 }
 
+
+
 # django-allauth
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # Определяет срок действия писем с подтверждением по электронной почте
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'  # Вход на сайт по логину и почте
@@ -254,3 +258,7 @@ ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 10  # Количество попыток не у
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300  # Время блокировки пользователя в секундах после количества не удачного ввода логина и пароля.
 ACCOUNT_EMAIL_REQUIRED = True
 LOGIN_REDIRECT_URL = 'dashboard'
+
+# yookassa
+Configuration.account_id = os.getenv('ACCOUNT_ID_YOOKASSA')
+Configuration.secret_key = os.getenv('SECRET_KEY_YOOKASSA')
