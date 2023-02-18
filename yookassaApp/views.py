@@ -43,7 +43,7 @@ class CreateTransaction(LoginRequiredMixin, CreateView):
         builder = PaymentRequestBuilder()
         builder.set_amount({"value": transaction.value, "currency": Currency.RUB}) \
             .set_confirmation({"type": ConfirmationType.REDIRECT, "return_url": "https://fortuhost.ru"}) \
-            .set_capture(False) \
+            .set_capture(True) \
             .set_description("Пополнение баланса") \
             .set_metadata({"token": str(transaction.transaction_token),
                            "client_id": self.request.user.pk, })
@@ -77,7 +77,7 @@ def webhook_transaction(request):
         return HttpResponse(status=400)
 
     # Извлечение JSON объекта из тела запроса
-    response_object = json.loads(request.body)
+    response_object = json.loads(request.body)['object']
     try:
         # Создание объекта класса уведомлений в зависимости от события
         if response_object['status'] == 'succeeded':
