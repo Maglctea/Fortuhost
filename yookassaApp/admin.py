@@ -1,6 +1,7 @@
 from django.contrib import admin
 from yookassaApp.models import TransactionStatus, Transaction, Currensy, Refund, RefundStatus
 
+
 # @admin.register(models.User)
 # class CustomUserAdmin(UserAdmin):
 #
@@ -34,9 +35,17 @@ from yookassaApp.models import TransactionStatus, Transaction, Currensy, Refund,
 #         "user_permissions",
 #     )
 
+@admin.register(Transaction)
+class AppAdmin(admin.ModelAdmin):
+    list_display = ('user', 'status', 'value', 'currency', 'created_at', 'updated_at', 'transaction_token')
+    list_filter = ('status', 'currency')
+    ordering = ('user', 'pk', 'status', 'currency', 'created_at', 'updated_at')
+    list_per_page = 20
+    search_fields = ('user__username', 'transaction_token')
+    list_display_links = ('user', 'status')
+
 
 admin.site.register(TransactionStatus)
 admin.site.register(Currensy)
-admin.site.register(Transaction)
 admin.site.register(Refund)
 admin.site.register(RefundStatus)

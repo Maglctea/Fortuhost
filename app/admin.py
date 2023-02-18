@@ -1,40 +1,21 @@
 from django.contrib import admin
-from app.models import App, CustomUser, AppStatus
+from app.models import App, AppStatus
 
-# @admin.register(models.User)
-# class CustomUserAdmin(UserAdmin):
-#
-#     fieldsets = (
-#         (None, {"fields": ("username", "password")}),
-#         (_("Personal info"), {"fields": ("first_name", "last_name", "email", "wallet",)}),
-#         (
-#             _("Permissions"),
-#             {
-#                 "fields": (
-#                     "is_active",
-#                     "is_staff",
-#                     "is_superuser",
-#                     "groups",
-#                     "user_permissions",
-#                 ),
-#             },
-#         ),
-#         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-#     )
-#
-#     form = UserChangeForm
-#     add_form = UserCreationForm
-#     change_password_form = AdminPasswordChangeForm
-#     list_display = ("username", "email", "first_name", "last_name", "is_staff")
-#     list_filter = ("is_staff", "is_superuser", "is_active", "groups")
-#     search_fields = ("username", "first_name", "last_name", "email")
-#     ordering = ("username",)
-#     filter_horizontal = (
-#         "groups",
-#         "user_permissions",
-#     )
+@admin.register(App)
+class AppAdmin(admin.ModelAdmin):
+    list_display = (
+        'user', 'title', 'docker_id', 'app_status', 'time_create', 'time_update', 'time_start'
+    )
+    list_filter = ('app_status',)
+    ordering = ('user', 'pk',)
+    list_per_page = 10
+    search_fields = ('user__username', 'title')
+    list_display_links = ('user', 'title')
 
 
-admin.site.register(App)
-admin.site.register(CustomUser)
-admin.site.register(AppStatus)
+@admin.register(AppStatus)
+class AppAdmin(admin.ModelAdmin):
+    list_display = ('status', 'color', 'permission_start', 'permission_stop', 'permission_restart', 'permission_delete')
+    ordering = ('pk',)
+    list_display_links = ('status', 'color')
+
