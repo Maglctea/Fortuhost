@@ -4,7 +4,8 @@ from accounts.models import CustomUser
 @admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
     list_display = (
-        'username', 'email', 'first_name', 'last_name', 'is_active', 'is_superuser', 'date_joined', 'last_login'
+        'username', 'email', 'first_name', 'last_name', 'is_active',
+        'is_superuser', 'date_joined', 'last_login', 'wallet'
     )
     list_filter = ('is_active', 'is_superuser')
     ordering = ('last_login', 'is_active',)
